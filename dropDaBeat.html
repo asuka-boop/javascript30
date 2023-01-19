@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="min-height=100%,width=device-width, initial-scale=1.0">
+    <title>JsDrumKit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="keys">
+        <!-- 从keycode.info得到键盘字母相应的key值(每个键的keyCode是标准固定的不是自己设置的) -->
+        <div data-key="65" class="key"><kbd>A</kbd><span>hithat</span></div>
+        <div data-key="87" class="key"><kbd>W</kbd><span>openhat</span></div>
+        <div data-key="83" class="key"><kbd>S</kbd><span>kick</span></div>
+        <div data-key="68" class="key"><kbd>D</kbd><span>snare</span></div>
+        <div data-key="70" class="key"><kbd>F</kbd><span>tom</span></div>
+        <div data-key="67" class="key"><kbd>C</kbd><span>boom</span></div>
+        <div data-key="71" class="key"><kbd>G</kbd><span>clap</span></div>
+        <div data-key="69" class="key"><kbd>E</kbd><span>ride</span></div>
+        <div data-key="72" class="key"><kbd>H</kbd><span>tink</span></div>
+    </div>
+    <audio data-key="65" src="./sounds/hihat.wav"></audio>
+    <audio data-key="87" src="./sounds/openhat.wav"></audio>
+    <audio data-key="83" src="./sounds/kick.wav"></audio>
+    <audio data-key="68" src="./sounds/snare.wav"></audio>
+    <audio data-key="70" src="./sounds/tom.wav"></audio>
+    <audio data-key="67" src="./sounds/boom.wav"></audio>
+    <audio data-key="71" src="./sounds/clap.wav"></audio>
+    <audio data-key="69" src="./sounds/ride.wav"></audio>
+    <audio data-key="72" src="./sounds/tink.wav"></audio>
+
+
+
+    <script>
+        function playSound (e) {
+            // keycode目前已被禁用
+            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+            if (!audio) return;
+
+            key.classList.add('playing');
+            audio.currentTime = 0;
+            audio.play();
+        }
+
+        function removeTransition (e) {
+            if (e.propertyName !== 'transform') return;
+            e.target.classList.remove('playing')
+        }
+        // addEventListener事件触发时，事件对象会作为第一个参数传入后面的函数。然后比如我们现在在playSound里面打印他的入参，就会看到keydown的事件对象以及里面包含的所有信息、方法等
+        window.addEventListener('keyup', playSound);
+        const keys = Array.from(document.querySelectorAll('.key'));
+        keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    </script>
+</body>
+
+</html>
